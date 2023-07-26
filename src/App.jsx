@@ -4,9 +4,8 @@ import 'materialize-css';
 
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
-import TripsPage from './pages/Trips';
-import CreateTripPage from './pages/CreateTrip';
-import SelfTripsPage from './pages/SelfTrips';
+import ImagesPage from './pages/Images';
+import CreateImagePage from './pages/CreateImage';
 import ProfilePage from './pages/Profile';
 
 import { AuthContext } from './context/context';
@@ -54,15 +53,15 @@ function App() {
         {isAuth === true ? (
           role === 'creator' ? (
             <Routes>
-              <Route index exact path="/images" element={<TripsPage />} />
+              <Route index exact path="/images" element={<ImagesPage />} />
               <Route index exact path="/profile" element={<ProfilePage />} />
-              <Route strict exact path="/image/create" element={<CreateTripPage />} />
+              <Route strict exact path="/image/create" element={<CreateImagePage />} />
 
               <Route path="*" element={<Navigate to="/images" />} />
             </Routes>
           ) : (
             <Routes>
-              <Route strict exact path="/images" element={<TripsPage />} />
+              <Route strict exact path="/images" element={<ImagesPage />} />
               <Route index exact path="/profile" element={<ProfilePage />} />
 
               <Route path="*" element={<Navigate to="/images" />} />
@@ -70,7 +69,7 @@ function App() {
           )
         ) : (
           <Routes>
-            <Route strict exact path="/images" element={<TripsPage />} />
+            <Route strict exact path="/images" element={<ImagesPage />} />
             <Route strict exact path="/login" element={<LoginPage />} />
             <Route strict exact path="/signup" element={<SignupPage />} />
 
