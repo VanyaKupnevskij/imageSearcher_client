@@ -1,0 +1,12 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
+.block {
+  padding: pxToRem(25px);
+  display: flex;
+  justify-content: center;
+}
+
+.block_component {
+  background-color: $panel_color;
+}

@@ -1,0 +1,20 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
+.block {
+  padding: pxToRem(25px);
+  display: flex;
+  justify-content: center;
+}
+
+.block_component {
+  background-color: $panel_color;
+}
+
+.input_image {
+  white-space: pre-wrap;
+  text-align: left;
+  letter-spacing: 0em;
+  line-height: 1.2em;
+  font-family: monospace;
+}
