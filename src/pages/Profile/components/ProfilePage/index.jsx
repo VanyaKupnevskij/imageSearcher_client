@@ -42,6 +42,25 @@ function ProfilePage() {
     }
   }
 
+  async function copyTextToClipboard(text) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand('copy', true, text);
+    }
+  }
+
+  async function handleCopyClick(copyText) {
+    try {
+      await copyTextToClipboard(copyText);
+
+      message('Малюнок скопійовано!');
+    } catch (err) {
+      console.log(err);
+      message('Помилка при копіюванні!');
+    }
+  }
+
   function handleLogout(e) {
     auth.logout();
   }
@@ -121,7 +140,11 @@ function ProfilePage() {
                           'btn-floating btn-small btn-flat waves-effect waves-light ' +
                           styles.copy_btn
                         }>
-                        <i className="material-icons">content_copy</i>
+                        <i
+                          className="material-icons"
+                          onClick={() => handleCopyClick(image.imageData)}>
+                          content_copy
+                        </i>
                       </a>
 
                       <div className={styles.image_wrapper}>
