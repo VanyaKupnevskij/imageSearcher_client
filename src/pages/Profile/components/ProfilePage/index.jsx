@@ -5,15 +5,30 @@ import { useMessage } from '../../../../message.hook';
 import { useContext, useEffect, useState } from 'react';
 import http from '../../../../axios.common';
 import { AuthContext } from '../../../../context/context';
+import styles from './style.module.scss';
 
 function ProfilePage() {
   const auth = useContext(AuthContext);
   const message = useMessage();
   const [userInfo, setUserInfo] = useState(null);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     loadProfile();
+    loadImages();
   }, []);
+
+  async function loadImages() {
+    try {
+      const data = (await http.get('/image/getAllByCustomer/' + auth.user_id)).data;
+
+      setImages([...data]);
+    } catch (error) {
+      console.log(error);
+      message('Помилка при завантаженні малюнків');
+      setImages([]);
+    }
+  }
 
   async function loadProfile() {
     try {
@@ -94,6 +109,43 @@ function ProfilePage() {
               )}
             </Col>
           </Row>
+
+          <div className="grey-text text-lighten-2">
+            {images.map((image) => {
+              return (
+                <div className="row" key={image.imageId}>
+                  <div className="col s12">
+                    <div className="card-panel  indigo lighten-1">
+                      <a
+                        className={
+                          'btn-floating btn-small btn-flat waves-effect waves-light ' +
+                          styles.copy_btn
+                        }>
+                        <i className="material-icons">content_copy</i>
+                      </a>
+
+                      <div className={styles.image_wrapper}>
+                        <div className={'white-text ' + styles.image}>{image.imageData}</div>
+                      </div>
+
+                      <div className={'indigo-text text-lighten-4 ' + styles.tags}>
+                        {image.tags.map((tag) => (
+                          <a
+                            className={
+                              'indigo grey-text text-lighten-1 waves-effect waves-light btn-small ' +
+                              styles.tags_item
+                            }
+                            key={tag.tagId}>
+                            {tag.tagName}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

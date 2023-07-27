@@ -10,3 +10,40 @@
 .block_component {
   background-color: $panel_color;
 }
+
+.copy_btn {
+  margin-left: calc(100% - 32.4px);
+
+  &:hover {
+    background-color: $secondary_color;
+  }
+}
+
+.image {
+  &_wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  margin-top: pxToRem(20px);
+
+  white-space: pre-wrap;
+  text-align: left;
+  letter-spacing: 0em;
+  line-height: 1.2em;
+  font-family: monospace;
+}
+
+.tags {
+  display: flex;
+  gap: pxToRem(10px);
+  flex-wrap: wrap;
+
+  margin-top: pxToRem(20px);
+
+  &_item {
+    &:hover {
+      color: white !important;
+    }
+  }
+}
