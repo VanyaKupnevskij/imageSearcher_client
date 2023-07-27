@@ -12,7 +12,7 @@ function CreateImagePage() {
   const message = useMessage();
   const [form, setForm] = useState({
     imageData: '',
-    tags: [],
+    tags: '',
   });
 
   function handleChange(name, event) {
@@ -22,17 +22,29 @@ function CreateImagePage() {
   async function handleCreate(e) {
     e.preventDefault();
 
+    console.log(form.tags);
+    const tags = form.tags.split(',');
+
     try {
-      const data = (
+      const dataImg = (
         await http.post('/image/create', {
-          ...form,
+          imageData: form.imageData,
           customer: { customerId: auth.user_id },
         })
       ).data;
+      for (let tag of tags) {
+        console.log(tag);
+        const dataTag = (
+          await http.post('/tag/create', {
+            tagName: tag.trim(),
+            image: { imageId: dataImg.imageId },
+          })
+        ).data;
+      }
 
       setForm({
         imageData: '',
-        tags: [],
+        tags: '',
       });
       message('Створено малюнок успішно!');
     } catch (error) {
@@ -110,8 +122,8 @@ function CreateImagePage() {
                 id="input_to"
                 label="Теги"
                 m={12}
-                value={form.tripTo}
-                onChange={(event) => handleChange('tripTo', event)}
+                value={form.tags}
+                onChange={(event) => handleChange('tags', event)}
                 className="grey-text text-lighten-5"
               />
             </div>
