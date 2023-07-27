@@ -127,7 +127,7 @@ function ImagesPage() {
 
       <div className={globalStyles.container}>
         <div className={globalStyles.inner}>
-          <nav>
+          <nav className={styles.search}>
             <div className="nav-wrapper">
               <form>
                 <div className="input-field">
@@ -135,6 +135,7 @@ function ImagesPage() {
                     id="search"
                     type="search"
                     onChange={(e) => handleChangeInput(e.target.value)}
+                    placeholder="Пошук малюнків..."
                     value={searchText}
                   />
                   <label className="label-icon " htmlFor="search">
@@ -155,7 +156,7 @@ function ImagesPage() {
               </form>
             </div>
           </nav>
-          <div className="grey-text text-lighten-2">
+          <div className={'grey-text text-lighten-2 ' + styles.list_images}>
             {images.map((image) => {
               return (
                 <div className="row" key={image.imageId}>

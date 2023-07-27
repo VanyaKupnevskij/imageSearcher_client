@@ -11,6 +11,14 @@
   background-color: $panel_color;
 }
 
+.search {
+  position: fixed;
+  left: 50%;
+  width: 50%;
+  z-index: 10;
+  transform: translateX(-50%);
+}
+
 .search_button {
   cursor: pointer;
 }
@@ -25,6 +33,10 @@
   &:hover {
     background-color: $secondary_color;
   }
+}
+
+.list_images {
+  margin-top: pxToRem(80px);
 }
 
 .image {
