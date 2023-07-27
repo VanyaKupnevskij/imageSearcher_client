@@ -11,6 +11,14 @@
   background-color: $panel_color;
 }
 
+.search_button {
+  cursor: pointer;
+}
+
+.clear_button {
+  color: rgb(77, 74, 85) !important;
+}
+
 .copy_btn {
   margin-left: calc(100% - 32.4px);
 

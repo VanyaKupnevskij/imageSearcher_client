@@ -11,6 +11,8 @@ function ImagesPage() {
   const auth = useContext(AuthContext);
   const message = useMessage();
   const [images, setImages] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  let timoutSearch = null;
 
   useEffect(() => {
     loadImages();
@@ -18,9 +20,16 @@ function ImagesPage() {
 
   async function loadImages() {
     try {
-      const data = (await http.get('/image/')).data;
+      let dataResponce = null;
+      if (searchText === '') {
+        dataResponce = (await http.get('/image/')).data;
+      } else {
+        dataResponce = (
+          await http.get('/image/getAllByTagName/', { params: { tagName: searchText } })
+        ).data;
+      }
 
-      setImages([...data]);
+      setImages([...dataResponce]);
     } catch (error) {
       console.log(error);
       message('Помилка при завантаженні малюнків');
@@ -28,8 +37,38 @@ function ImagesPage() {
     }
   }
 
+  async function copyTextToClipboard(text) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand('copy', true, text);
+    }
+  }
+
+  async function handleCopyClick(copyText) {
+    try {
+      await copyTextToClipboard(copyText);
+
+      message('Малюнок скопійовано!');
+    } catch (err) {
+      console.log(err);
+      message('Помилка при копіюванні!');
+    }
+  }
+
   function handleLogout(e) {
     auth.logout();
+  }
+
+  useEffect(() => {
+    timoutSearch = setTimeout(() => {
+      loadImages();
+    }, 500);
+  }, [searchText]);
+
+  function handleChangeInput(value) {
+    clearTimeout(timoutSearch);
+    setSearchText(value);
   }
 
   return (
@@ -92,11 +131,26 @@ function ImagesPage() {
             <div className="nav-wrapper">
               <form>
                 <div className="input-field">
-                  <input id="search" type="search" required />
-                  <label className="label-icon" htmlFor="search">
-                    <i className="material-icons">search</i>
+                  <input
+                    id="search"
+                    type="search"
+                    onChange={(e) => handleChangeInput(e.target.value)}
+                    value={searchText}
+                  />
+                  <label className="label-icon " htmlFor="search">
+                    <i
+                      className={'material-icons ' + styles.search_button}
+                      onClick={(e) => loadImages()}>
+                      search
+                    </i>
                   </label>
-                  <i className="material-icons">close</i>
+                  {searchText && (
+                    <i
+                      className={'material-icons ' + styles.clear_button}
+                      onClick={(e) => handleChangeInput('')}>
+                      close
+                    </i>
+                  )}
                 </div>
               </form>
             </div>
@@ -112,7 +166,11 @@ function ImagesPage() {
                           'btn-floating btn-small btn-flat waves-effect waves-light ' +
                           styles.copy_btn
                         }>
-                        <i className="material-icons">content_copy</i>
+                        <i
+                          className="material-icons"
+                          onClick={() => handleCopyClick(image.imageData)}>
+                          content_copy
+                        </i>
                       </a>
 
                       <div className={styles.image_wrapper}>
@@ -126,7 +184,8 @@ function ImagesPage() {
                               'indigo grey-text text-lighten-1 waves-effect waves-light btn-small ' +
                               styles.tags_item
                             }
-                            key={tag.tagId}>
+                            key={tag.tagId}
+                            onClick={() => handleChangeInput(tag.tagName)}>
                             {tag.tagName}
                           </a>
                         ))}
